@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: pointservice-config
+data:
+    DatabaseConnectionString__Host: postgres
+    DatabaseConnectionString__Database: myapp
+    DatabaseConnectionString__Port: "5432"
+    ASPNETCORE_ENVIRONMENT: Development
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: pointservice-config-secret
+type: Opaque
+data:
+    DatabaseConnectionString__UserName: bXl1c2Vy
+    DatabaseConnectionString__Password: cGFzc3dk
+    
