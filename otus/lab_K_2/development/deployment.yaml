@@ -26,12 +26,12 @@ spec:
                 configMapKeyRef:
                     name: pointservice-config
                     key: DatabaseConnectionString__Port
-                command:
-                - sh
-                - "-c"
-                - |
-                    until pg_isready -h $POSTGRES_HOST  -p  $POSTGRES_PORT; 
-                    do echo waiting for database; sleep 2; done;
+            command:
+            - sh
+            - "-c"
+            - |
+                until pg_isready -h $POSTGRES_HOST  -p  $POSTGRES_PORT; 
+                do echo waiting for database; sleep 2; done;
           containers:
           - name: pointservice-app
             image: pointservice-app

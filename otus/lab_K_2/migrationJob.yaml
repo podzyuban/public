@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migration
+spec:
+  template:
+    metadata:
+      name: migration
+    spec:
+        containers:
+        - name: migration
+          image: podzyubandocker/pointservice:v3
+          command: [ "dotnet", "PointService.DatabaseMigration.dll", "migration"]
+          env:
+          - name: DatabaseConnectionString__Host
+            valueFrom:
+              configMapKeyRef:
+                  name: pointservice-config
+                  key: DatabaseConnectionString__Host
+          - name: DatabaseConnectionString__Database
+            valueFrom:
+              configMapKeyRef:
+                  name: pointservice-config
+                  key: DatabaseConnectionString__Database
+          - name: DatabaseConnectionString__Port
+            valueFrom:
+              configMapKeyRef:
+                  name: pointservice-config
+                  key: DatabaseConnectionString__Port
+          - name: DatabaseConnectionString__UserName
+            valueFrom:
+              secretKeyRef:
+                  name: pointservice-config-secret
+                  key: DatabaseConnectionString__UserName
+          - name: DatabaseConnectionString__Password
+            valueFrom:
+              secretKeyRef:
+                  name: pointservice-config-secret
+                  key: DatabaseConnectionString__Password        
+        restartPolicy: Never
