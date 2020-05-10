@@ -6,7 +6,7 @@ replicaCount: 4
 
 image:
   repository:  podzyubandocker/pointservice
-  tag: v3
+  tag: v4
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -33,6 +33,7 @@ ingress:
     - host: arch.homework
       paths:  
       - /otusapp($|/)(.*)
+      - /swagger(swagger/$|/)(.*)
 
 postgresql:
   enabled: true
@@ -41,3 +42,4 @@ postgresql:
   postgresqlDatabase: myapp
   service:
     port: "5432"
+    type: NodePort

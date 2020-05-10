@@ -13,5 +13,5 @@ dependencies:
   version: 8.x.x
   repository: https://charts.bitnami.com/bitnami
   condition: postgresql.enabled
-   tags:
-   - pointservice-database
+  tags:
+  - pointservice-database

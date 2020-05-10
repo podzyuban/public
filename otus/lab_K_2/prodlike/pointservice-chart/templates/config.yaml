@@ -5,7 +5,7 @@ metadata:
 data:
     DatabaseConnectionString__Host: {{(include "postgresql.fullname" .)}}
     DatabaseConnectionString__Database: {{.Values.postgresql.postgresqlDatabase}}
-    DatabaseConnectionString__Port: {{.Values.postgresql.service.port}}  
+    DatabaseConnectionString__Port: {{.Values.postgresql.service.port | quote}}  
     ASPNETCORE_ENVIRONMENT: Development
 ---
 apiVersion: v1
