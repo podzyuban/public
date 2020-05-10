@@ -33,7 +33,6 @@ ingress:
     - host: arch.homework
       paths:  
       - /otusapp($|/)(.*)
-      - /swagger(swagger/$|/)(.*)
 
 postgresql:
   enabled: true
