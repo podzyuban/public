@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
     name: pointservice-config
 data:
-    DatabaseConnectionString__Host: {{.Values.externalPostgresql.postgresqlHost}}
-    DatabaseConnectionString__Database: {{.Values.externalPostgresql.postgresqlDatabase}}
-    DatabaseConnectionString__Port: {{.Values.externalPostgresql.postgresqlPort | quote}}  
+    DatabaseConnectionString__Host: {{(include "postgresql.fullname" .)}}
+    DatabaseConnectionString__Database: {{.Values.postgresql.postgresqlDatabase}}
+    DatabaseConnectionString__Port: {{.Values.postgresql.service.port}}  
     ASPNETCORE_ENVIRONMENT: Development
 ---
 apiVersion: v1
@@ -14,6 +14,6 @@ metadata:
     name: pointservice-config-secret
 type: Opaque
 data:
-    DatabaseConnectionString__UserName: {{.Values.externalPostgresql.postgresqlUsername | b64enc}}
-    DatabaseConnectionString__Password: {{.Values.externalPostgresql.postgresqlPassword | b64enc}}
+    DatabaseConnectionString__UserName: {{.Values.postgresql.postgresqlUsername | b64enc}}
+    DatabaseConnectionString__Password: {{.Values.postgresql.postgresqlPassword | b64enc}}
     

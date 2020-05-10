@@ -15,6 +15,8 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "pointservice-chart.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
     spec:
       initContainers:
         - name: check-db-ready
