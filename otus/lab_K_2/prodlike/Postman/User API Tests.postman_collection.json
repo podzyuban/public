@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0893f8c1-01ac-4d19-ab16-ca0529069ef9",
+		"_postman_id": "1a0afee3-722a-4d00-a582-dcd91c89ca09",
 		"name": "User API Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,12 +11,17 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "cd4bf1c8-d51a-478e-824e-41c6dc6acc66",
+						"id": "e462b559-ef87-48e9-9922-db62d191dfcc",
 						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"\r",
 							"var responseJSON = JSON.parse(responseBody)\r",
 							"var actual = responseJSON[\"id\"]\r",
 							"var expected = pm.collectionVariables.get(\"userId\")\r",
-							"pm.test(\"check id\", function(){ \r",
+							"pm.test(\"check id\", function () {\r",
 							"    pm.expect(expected).to.equal(actual);\r",
 							"})\r",
 							""
@@ -63,6 +68,20 @@
 		},
 		{
 			"name": "Get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c596d20c-881f-4358-aeff-ceae48cddda9",
+						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -96,9 +115,11 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "153da57e-3a13-4d40-9bea-66731c91d3d6",
+						"id": "5b153325-fd56-4bb2-aaa6-5740cdecb5f1",
 						"exec": [
-							""
+							"pm.test(\"status is 204\", function(){\r",
+							"    pm.response.to.have.status(204);\r",
+							"})"
 						],
 						"type": "text/javascript"
 					}
@@ -146,12 +167,16 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "dbcd94a5-ef9c-4992-ae6c-980f98c7cc49",
+						"id": "579b8f29-d751-4d4c-a0e9-322c11eff8c7",
 						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
 							"var responseJSON = JSON.parse(responseBody)\r",
 							"var actualUserName = responseJSON[\"userName\"]\r",
-							"var expectedUserName =pm.collectionVariables.get(\"nextUserName\")\r",
-							"pm.test(\"check userName after update\", function(){ \r",
+							"var expectedUserName = pm.collectionVariables.get(\"nextUserName\")\r",
+							"pm.test(\"check userName after update\", function () {\r",
 							"    pm.expect(expectedUserName).to.equal(actualUserName);\r",
 							"})\r",
 							""
@@ -178,6 +203,20 @@
 		},
 		{
 			"name": "Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "84298c94-c61f-49cf-8f75-21ae697b20e1",
+						"exec": [
+							"pm.test(\"status is 204\", function(){\r",
+							"    pm.response.to.have.status(204);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disabledSystemHeaders": {
 					"connection": true
@@ -217,7 +256,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "e64fb516-e795-477c-ad8d-f357966d2cb9",
+						"id": "6375dee2-f36c-4512-a1ee-3540d2f67bda",
 						"exec": [
 							"pm.test(\"status is 500\", function(){\r",
 							"    pm.response.to.have.status(500);\r",
@@ -249,7 +288,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "5cdc71fb-72b0-46fa-b9c1-957d64b9814a",
+				"id": "e5023d04-d70d-452c-8e8e-43a89689b530",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -259,7 +298,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "237241b5-7365-4e9f-bf59-6bb578632b6d",
+				"id": "2f2173e5-9f43-4c7f-a5b1-e2fc6653d24b",
 				"type": "text/javascript",
 				"exec": [
 					""
