@@ -11,5 +11,5 @@ spec:
       paths:
         - path: /otusapp($|/)(.*)
           backend:
-            serviceName: pointservice-service
+            serviceName: pointservice-chart
             servicePort: 9000

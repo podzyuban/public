@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pointservice-chart.fullname" . }}
+  labels:
+{{ include "pointservice-chart.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.name }}
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ include "pointservice-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
