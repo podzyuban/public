@@ -10,6 +10,6 @@ spec:
     - port: {{ .Values.service.port.value }}
       targetPort: {{ .Values.service.port.alias }}
       protocol: TCP
+      name: {{ .Values.service.port.alias }}
   selector:
-    app.kubernetes.io/name: {{ include "pointservice-chart.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "pointservice-chart.selectorLabels" . | nindent 4 }}

@@ -6,8 +6,8 @@ replicaCount: 2
 
 image:
   repository:  podzyubandocker/pointservice
-  tag: v8
-  pullPolicy: IfNotPresent
+  tag: v10
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""
