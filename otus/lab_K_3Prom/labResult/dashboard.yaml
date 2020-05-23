@@ -6,7 +6,7 @@ metadata:
     grafana_dashboard: "1"
 data:
   grafana-myapp-dashboard.json: |-
-    {
+    { 
     "annotations": {
     "list": [
       {
@@ -19,8 +19,9 @@ data:
         "type": "dashboard"
       }
     ]  },  
-    "editable": true,  "gnetId": null,  "graphTooltip": 0,  "id": 25,  "links": [],  
-    "panels": [    {
+    "editable": true,  "gnetId": null,  "graphTooltip": 0,  "id": 25,  "links": [],
+    "panels": [
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -68,7 +69,7 @@ data:
       "targets": [
         {
           "datasource": "Prometheus",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"pointservice-chart.*\"}[1m])) by(pod)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"pointservice-chart.*\"}[10m])) by(pod)",
           "interval": "",
           "legendFormat": "{{pod}}",
           "refId": "A"
@@ -208,6 +209,41 @@ data:
       }
     },
     {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                290
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "PointService Latency alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -250,31 +286,39 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[1m])) by (controller, action ,le))*1000",
+          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[10m])) by (controller, action ,le))*1000",
           "interval": "",
           "legendFormat": "0.99-{{controller}}-{{action}}",
           "refId": "D"
         },
         {
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m])) by (controller, action, le))*1000",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[10m])) by (controller, action, le))*1000",
           "interval": "",
           "legendFormat": "0.95-{{controller}}-{{action}}",
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(0.5, sum(rate(http_request_duration_seconds_bucket[1m])) by (controller,action,le))*1000",
+          "expr": "histogram_quantile(0.5, sum(rate(http_request_duration_seconds_bucket[10m])) by (controller,action,le))*1000",
           "interval": "",
           "legendFormat": "0.5-{{controller}}-{{action}}",
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(1, sum(rate(http_request_duration_seconds_bucket[1m])) by (controller, action ,le))*1000",
+          "expr": "histogram_quantile(1, sum(rate(http_request_duration_seconds_bucket[10m])) by (controller, action ,le))*1000",
           "interval": "",
           "legendFormat": "Max-{{controller}}-{{action}}",
           "refId": "C"
         }
       ],
-      "thresholds": [],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 290
+        }
+      ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
@@ -358,7 +402,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (controller, action) (rate(http_requests_received_total[1m])) ",
+          "expr": "sum by (controller, action) (rate(http_requests_received_total[10m])) ",
           "interval": "",
           "legendFormat": "{{controller}}-{{action}}",
           "refId": "B"
@@ -406,6 +450,41 @@ data:
       }
     },
     {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                200
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "PointService Error Count alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -446,13 +525,21 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (controller, action) (increase(http_requests_received_total{controller != \"Startup\", controller !=  \"Health\", code=~\"5.+\"}[10m]))",
+          "expr": "sum by (controller, action, code) (increase(http_requests_received_total{code=~\"5.+\"}[10m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "thresholds": [],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 200
+        }
+      ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
@@ -534,7 +621,7 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(nginx_ingress_controller_request_duration_seconds_count[1m]))",
+          "expr": "sum(rate(nginx_ingress_controller_request_duration_seconds_count[10m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -582,6 +669,41 @@ data:
       }
     },
     {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                4000
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Ngress Error Count alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -622,13 +744,21 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (http_status)(increase(nginx_ingress_controller_request_duration_seconds_count{http_status=~\"5.+\"}[10m]))",
+          "expr": "sum by (status)(increase(nginx_ingress_controller_request_duration_seconds_count{status=~\"5.+\"}[10m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "thresholds": [],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 4000
+        }
+      ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
@@ -712,25 +842,25 @@ data:
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[1m])) by (le))*1000",
+          "expr": "histogram_quantile(0.99, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[10m])) by (le))*1000",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(0.95, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[1m])) by (le))*1000",
+          "expr": "histogram_quantile(0.95, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[10m])) by (le))*1000",
           "interval": "",
           "legendFormat": "",
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(0.5, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[1m])) by (le))*1000",
+          "expr": "histogram_quantile(0.5, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[10m])) by (le))*1000",
           "interval": "",
           "legendFormat": "",
           "refId": "C"
         },
         {
-          "expr": "histogram_quantile(1, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[1m])) by (le))*1000",
+          "expr": "histogram_quantile(1, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[10m])) by (le))*1000",
           "interval": "",
           "legendFormat": "",
           "refId": "D"
@@ -776,12 +906,19 @@ data:
         "align": false,
         "alignLevel": null
       }
-    } 
-    ],  "refresh": "5s",  "schemaVersion": 22,  "style": "dark",  "tags": [],  
-    "templating": {    "list": []  },  "time": {
+    }  ],
+    "refresh": "5s",
+    "schemaVersion": 22,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+    "list": []
+    },
+    "time": {
     "from": "now-1h",
     "to": "now"
-    },  "timepicker": {},
+    },
+    "timepicker": {},
     "timezone": "",
     "title": "PointService dashboard",
     "uid": "zdipSyRMk",
