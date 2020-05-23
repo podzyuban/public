@@ -88,3 +88,6 @@ spec:
                 path: /health
             initialDelaySeconds: 10
             periodSeconds: 5
+        resources:
+            limits:
+                memory: "200Mi"

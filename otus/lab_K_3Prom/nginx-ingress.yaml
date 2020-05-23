@@ -8,3 +8,8 @@ controller:
             https: 443
     service:
         type: NodePort
+        
+    metrics:
+     enabled: true
+     serviceMonitor:
+      enabled: true
