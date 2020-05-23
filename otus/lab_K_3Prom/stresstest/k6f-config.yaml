@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k6f-config
+data:
+  apphostname: arch.homework
+  apphost: nginx-nginx-ingress-controller:80/otusapp
+  rps: '40'
+  duration: '30m'
+---

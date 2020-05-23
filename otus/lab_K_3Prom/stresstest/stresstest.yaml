@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: stresstest
+spec:
+  template:
+    metadata:
+      name: stresstest
+    spec:
+        containers:
+        - name: stresstest
+          image: loadimpact/k6
+          command: ["k6", "run", "/k6f/stresstest.js"]
+          env:
+          - name: APPHOSTNAME
+            valueFrom:
+              configMapKeyRef:
+                  name: k6f-config
+                  key: apphostname
+          - name: APPHOST
+            valueFrom:
+              configMapKeyRef:
+                  name: k6f-config
+                  key: apphost
+          - name: RPS
+            valueFrom:
+              configMapKeyRef:
+                  name: k6f-config
+                  key: rps
+          - name: DURATION
+            valueFrom:
+              configMapKeyRef:
+                  name: k6f-config
+                  key: duration
+          volumeMounts:
+          - name: k6f
+            mountPath: /k6f
+        restartPolicy: Never
+        volumes:
+        - name: k6f
+          configMap:
+            name: k6f-file-config
+  backoffLimit: 0
