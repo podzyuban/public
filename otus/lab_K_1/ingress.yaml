@@ -9,7 +9,7 @@ spec:
   - host: arch.homework
     http:
       paths:
-        - path: /otusapp($|/)(.*)
+        - path: /otusapp/denis($|/)(.*)
           backend:
             serviceName: lab1-service-pd
             servicePort: 9000
