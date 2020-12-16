@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1a0afee3-722a-4d00-a582-dcd91c89ca09",
+		"_postman_id": "ac0fe1fb-2741-48dd-ab16-5b09ce2fc891",
 		"name": "User API Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "e462b559-ef87-48e9-9922-db62d191dfcc",
+						"id": "a0808420-a3a5-4ce9-b42c-c44879679dad",
 						"exec": [
 							"pm.test(\"status is 200\", function(){\r",
 							"    pm.response.to.have.status(200);\r",
@@ -72,7 +72,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c596d20c-881f-4358-aeff-ceae48cddda9",
+						"id": "e51946bd-ae2e-47f2-a419-de745e4ddd9f",
 						"exec": [
 							"pm.test(\"status is 200\", function(){\r",
 							"    pm.response.to.have.status(200);\r",
@@ -115,7 +115,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "5b153325-fd56-4bb2-aaa6-5740cdecb5f1",
+						"id": "7b6e8dad-c55c-4abb-95e2-801d40dd6efa",
 						"exec": [
 							"pm.test(\"status is 204\", function(){\r",
 							"    pm.response.to.have.status(204);\r",
@@ -167,7 +167,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "579b8f29-d751-4d4c-a0e9-322c11eff8c7",
+						"id": "710a8972-f4d1-450f-841c-0b0ff40b4072",
 						"exec": [
 							"pm.test(\"status is 200\", function(){\r",
 							"    pm.response.to.have.status(200);\r",
@@ -207,7 +207,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "84298c94-c61f-49cf-8f75-21ae697b20e1",
+						"id": "be8f0963-cb57-4c23-8423-78e4944e0d37",
 						"exec": [
 							"pm.test(\"status is 204\", function(){\r",
 							"    pm.response.to.have.status(204);\r",
@@ -256,7 +256,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "6375dee2-f36c-4512-a1ee-3540d2f67bda",
+						"id": "3474c31e-b189-479d-a293-d76717a6fefa",
 						"exec": [
 							"pm.test(\"status is 500\", function(){\r",
 							"    pm.response.to.have.status(500);\r",
@@ -288,7 +288,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "e5023d04-d70d-452c-8e8e-43a89689b530",
+				"id": "b08a0a06-c91f-4981-9448-b4486c09779f",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -298,7 +298,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "2f2173e5-9f43-4c7f-a5b1-e2fc6653d24b",
+				"id": "30295a13-185b-4ce2-b061-d1ca07340402",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -308,25 +308,25 @@
 	],
 	"variable": [
 		{
-			"id": "18506ca9-b1f2-46f5-96c9-6b463d157c98",
+			"id": "8c52366e-b714-42b5-bdec-70f26abf25bd",
 			"key": "userId",
 			"value": 1,
 			"type": "number"
 		},
 		{
-			"id": "fadddc70-d7b9-4206-9edb-dd9b2b272dd8",
+			"id": "eab0deda-daab-4c6d-8d00-cf15d75ef334",
 			"key": "userName",
 			"value": "userName1",
 			"type": "string"
 		},
 		{
-			"id": "0f9b3b1d-9aa9-40c8-948f-497e4b62333c",
+			"id": "5e294c17-0cd4-4090-9fb9-567a23c99446",
 			"key": "baseUrl",
-			"value": "http://arch.homework/otusapp",
+			"value": "http://arch.homework/otusapp/denis",
 			"type": "string"
 		},
 		{
-			"id": "d63f35a1-ad72-403a-9dce-58d3e6543c15",
+			"id": "b636d080-8bf2-4dfe-be37-f3df562e9a46",
 			"key": "userNameNext",
 			"value": "userNameNext",
 			"type": "string"

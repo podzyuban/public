@@ -32,7 +32,7 @@ ingress:
   hosts:
     - host: arch.homework
       paths:  
-      - /otusapp($|/)(.*)
+      - /otusapp/denis($|/)(.*)
 
 postgresql:
   enabled: true
