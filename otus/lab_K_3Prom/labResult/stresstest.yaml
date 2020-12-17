@@ -40,8 +40,8 @@ metadata:
   name: k6f-config
 data:
   apphostname: arch.homework
-  apphost: nginx-nginx-ingress-controller:80/otusapp
-  rps: '40'
+  apphost: nginx-ingress-nginx-controller:80/otusapp/denis
+  rps: '80'
   duration: '30m'
 ---
 apiVersion: batch/v1
