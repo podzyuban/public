@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pointservice-apiGateway-chart.fullname" . }}
+  labels:
+{{ include "pointservice-apiGateway-chart.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port.value }}
+      targetPort: {{ .Values.service.port.alias }}
+      protocol: TCP
+      name: {{ .Values.service.port.alias }}
+  selector:
+    {{- include "pointservice-apiGateway-chart.selectorLabels" . | nindent 4 }}
