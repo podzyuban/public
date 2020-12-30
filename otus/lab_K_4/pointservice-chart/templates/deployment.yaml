@@ -71,6 +71,26 @@ spec:
             secretKeyRef:
                 name: pointservice-config-secret
                 key: DatabaseConnectionString__Password
+        - name: Audience__PublicKey
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: Audience__PublicKey
+        - name: Audience__PrivateKey
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: Audience__PrivateKey
+        - name: Audience__Iss
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: Audience__Iss
+        - name: Audience__Aud
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: Audience__Aud
         - name: ASPNETCORE_ENVIRONMENT
           valueFrom:
             configMapKeyRef:

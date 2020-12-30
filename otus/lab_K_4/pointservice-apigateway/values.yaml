@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository:  podzyubandocker/pointservice.apigateway
-  tag: v12
+  tag: v17
   pullPolicy: Always
 
 nameOverride: ""

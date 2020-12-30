@@ -16,4 +16,9 @@ type: Opaque
 data:
     DatabaseConnectionString__UserName: {{.Values.postgresql.postgresqlUsername | b64enc}}
     DatabaseConnectionString__Password: {{.Values.postgresql.postgresqlPassword | b64enc}}
+    Audience__PublicKey: {{.Values.audience.publicKey | b64enc}}
+    Audience__PrivateKey: {{.Values.audience.privateKey | b64enc}}
+    Audience__Iss: {{.Values.audience.iss | b64enc}}
+    Audience__Aud: {{.Values.audience.aud | b64enc}}
+
     
