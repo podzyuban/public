@@ -1,0 +1,841 @@
+{
+	"info": {
+		"_postman_id": "ac0fe1fb-2741-48dd-ab16-5b09ce2fc891",
+		"name": "User API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register User 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"var responseJSON = JSON.parse(responseBody)\r",
+							"var actual = responseJSON[\"name\"]\r",
+							"var expected = pm.collectionVariables.get(\"name1\")\r",
+							"pm.collectionVariables.set(\"userId1\", responseJSON[\"id\"])\r",
+							"pm.test(\"check user name\", function () {\r",
+							"    pm.expect(expected).to.equal(actual);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function getRandomString() {\r",
+							"    return Math.random().toString(36).substring(2);\r",
+							"}\r",
+							"\r",
+							"pm.collectionVariables.set(\"name1\", getRandomString());\r",
+							"pm.collectionVariables.set(\"email1\", getRandomString());\r",
+							"pm.collectionVariables.set(\"login1\", getRandomString());\r",
+							"pm.collectionVariables.set(\"password1\", getRandomString());\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true,
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "text/plain",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \"name\": \"{{name1}}\",\r\n    \"email\": \"{{email1}}\",\r\n    \"login\": \"{{login1}}\",\r\n    \"password\": \"{{password1}}\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/person/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"person",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get  token 4 user 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"var responseJSON = JSON.parse(responseBody)\r",
+							"var token = responseJSON[\"accessToken\"]\r",
+							"pm.collectionVariables.set(\"userToken1\", token)\r",
+							"pm.test(\"check not null token\", function () {\r",
+							"    pm.expect(token).to.not.null;\r",
+							"    pm.expect(pm.collectionVariables.get(\"userToken1\")).to.eq(token)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "text/plain",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \"login\": \"{{login1}}\",\r\n    \"password\": \"{{password1}}\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try Get User without token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 401\", function(){\r",
+							"    pm.response.to.have.status(401);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \"login\": \"{{login1}}\",\r\n    \"password\": \"{{password1}}\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/person/{{userId1}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"person",
+						"{{userId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User 1 with token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"var responseJSON = JSON.parse(responseBody)\r",
+							"var actualName = responseJSON[\"name\"]\r",
+							"var actualEmail = responseJSON[\"email\"]\r",
+							"var actualLogin = responseJSON[\"login\"]\r",
+							"\r",
+							"var expectedName = pm.collectionVariables.get(\"name1\")\r",
+							"var expectedEmail = pm.collectionVariables.get(\"email1\")\r",
+							"var expectedLogin = pm.collectionVariables.get(\"login1\")\r",
+							"\r",
+							"pm.collectionVariables.set(\"userId1\", responseJSON[\"id\"])\r",
+							"\r",
+							"pm.test(\"check response\", function () {\r",
+							"    pm.expect(expectedName).to.equal(actualName)\r",
+							"    pm.expect(expectedEmail).to.equal(actualEmail)\r",
+							"    pm.expect(expectedLogin).to.equal(actualLogin)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseUrl}}/person/{{userId1}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"person",
+						"{{userId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 204\", function(){\r",
+							"    pm.response.to.have.status(204)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function getRandomString() {\r",
+							"    return Math.random().toString(36).substring(2);\r",
+							"}\r",
+							"\r",
+							"pm.collectionVariables.set(\"name1\", getRandomString());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "text/plain",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\": {{userId1}}, \"name\": \"{{name1}}\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/person/{{userId1}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"person",
+						"{{userId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User 1 with token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"var responseJSON = JSON.parse(responseBody)\r",
+							"var actualName = responseJSON[\"name\"]\r",
+							"var actualEmail = responseJSON[\"email\"]\r",
+							"var actualLogin = responseJSON[\"login\"]\r",
+							"\r",
+							"var expectedName = pm.collectionVariables.get(\"name1\")\r",
+							"var expectedEmail = pm.collectionVariables.get(\"email1\")\r",
+							"var expectedLogin = pm.collectionVariables.get(\"login1\")\r",
+							"\r",
+							"pm.collectionVariables.set(\"userId1\", responseJSON[\"id\"])\r",
+							"pm.test(\"check response\", function () {\r",
+							"    pm.expect(expectedName).to.equal(actualName)\r",
+							"    pm.expect(expectedEmail).to.equal(actualEmail)\r",
+							"    pm.expect(expectedLogin).to.equal(actualLogin)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseUrl}}/person/{{userId1}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"person",
+						"{{userId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register User 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"var responseJSON = JSON.parse(responseBody)\r",
+							"var actual = responseJSON[\"name\"]\r",
+							"var expected = pm.collectionVariables.get(\"name2\")\r",
+							"pm.collectionVariables.set(\"userId2\", responseJSON[\"id\"])\r",
+							"pm.test(\"check user name\", function () {\r",
+							"    pm.expect(expected).to.equal(actual)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function getRandomString() {\r",
+							"    return Math.random().toString(36).substring(2);\r",
+							"}\r",
+							"\r",
+							"pm.collectionVariables.set(\"name2\", getRandomString());\r",
+							"pm.collectionVariables.set(\"email2\", getRandomString());\r",
+							"pm.collectionVariables.set(\"login2\", getRandomString());\r",
+							"pm.collectionVariables.set(\"password2\", getRandomString());\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \"name\": \"{{name2}}\",\r\n    \"email\": \"{{email2}}\",\r\n    \"login\": \"{{login2}}\",\r\n    \"password\": \"{{password2}}\"}\r\n    "
+				},
+				"url": {
+					"raw": "{{baseUrl}}/person/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"person",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get  tokent 4 user 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"var responseJSON = JSON.parse(responseBody)\r",
+							"var token = responseJSON[\"accessToken\"]\r",
+							"pm.collectionVariables.set(\"userToken2\", token)\r",
+							"pm.test(\"check not null token\", function () {\r",
+							"    pm.expect(token).to.not.null\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \"login\": \"{{login2}}\",\r\n    \"password\": \"{{password2}}\"}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User 2 with token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"var responseJSON = JSON.parse(responseBody)\r",
+							"var actualName = responseJSON[\"name\"]\r",
+							"var actualEmail = responseJSON[\"email\"]\r",
+							"var actualLogin = responseJSON[\"login\"]\r",
+							"\r",
+							"var expectedName = pm.collectionVariables.get(\"name2\")\r",
+							"var expectedEmail = pm.collectionVariables.get(\"email2\")\r",
+							"var expectedLogin = pm.collectionVariables.get(\"login2\")\r",
+							"\r",
+							"pm.collectionVariables.set(\"userId2\", responseJSON[\"id\"])\r",
+							"pm.test(\"check response\", function () {\r",
+							"    pm.expect(expectedName).to.equal(actualName)\r",
+							"    pm.expect(expectedEmail).to.equal(actualEmail)\r",
+							"    pm.expect(expectedLogin).to.equal(actualLogin)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken2}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseUrl}}/person/{{userId2}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"person",
+						"{{userId2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User 2 with user 1 token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status is 500\", function(){\r",
+							"    pm.response.to.have.status(500)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "text/plain"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseUrl}}/person/{{userId2}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"person",
+						"{{userId2}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userId",
+			"value": 1
+		},
+		{
+			"key": "userName",
+			"value": "userName1"
+		},
+		{
+			"key": "baseUrl",
+			"value": "http://arch.homework/otusapp/denis"
+		},
+		{
+			"key": "userNameNext",
+			"value": "userNameNext"
+		},
+		{
+			"key": "email1",
+			"value": ""
+		},
+		{
+			"key": "login1",
+			"value": ""
+		},
+		{
+			"key": "name1",
+			"value": ""
+		},
+		{
+			"key": "password1",
+			"value": ""
+		},
+		{
+			"key": "userToken1",
+			"value": ""
+		},
+		{
+			"key": "userId1",
+			"value": ""
+		},
+		{
+			"key": "email2",
+			"value": ""
+		},
+		{
+			"key": "login2",
+			"value": ""
+		},
+		{
+			"key": "name2",
+			"value": ""
+		},
+		{
+			"key": "password2",
+			"value": ""
+		},
+		{
+			"key": "userId2",
+			"value": ""
+		},
+		{
+			"key": "userToken2",
+			"value": ""
+		}
+	]
+}
