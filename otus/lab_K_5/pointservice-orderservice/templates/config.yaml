@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: pointservice-orders-config
+data:
+    DatabaseConnectionString__Host: {{(include "postgresql.fullname" .)}}
+    DatabaseConnectionString__Database: {{.Values.postgresql.postgresqlDatabase}}
+    DatabaseConnectionString__Port: {{.Values.postgresql.service.port | quote}}  
+    ASPNETCORE_ENVIRONMENT: Development
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: pointservice-orders-config-secret
+type: Opaque
+data:
+    DatabaseConnectionString__UserName: {{.Values.postgresql.postgresqlUsername | b64enc}}
+    DatabaseConnectionString__Password: {{.Values.postgresql.postgresqlPassword | b64enc}}
+   

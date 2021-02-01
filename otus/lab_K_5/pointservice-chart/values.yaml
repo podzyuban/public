@@ -1,0 +1,49 @@
+# Default values for pointservice-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 4
+
+image:
+  repository:  podzyubandocker/pointservice.auth
+  tag: v5
+  pullPolicy: Always
+
+nameOverride: "authservice"
+fullnameOverride: "authservice"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+
+service:
+  type: NodePort
+  port: 
+    alias: web
+    value: 9000
+
+ingress:
+  enabled: false
+
+audience:
+  publicKey: MIIBCgKCAQEAs84jmXQ1N1DmZWOO+us8xUqI33Ay76zG/ZQ6s4GAxjcTDMdkpFep3ip/UJr3LWLqAHYSyojpe6H9bB7e/gus9y9AdTGF+W1io68KM2NEq6KGtMcNhZdsWwuX78oP2N3o6NFNDxT8zHF2C+4jM8OOHie+lJ1loL1pB0johIxNJyd6z4Dnlcalwb53smc1pmAOhbH/6oN2XzNzdef2Wl+U9UoDANM96JJ51GHKQXf0R+4xlvNhfEQ3A3OnBgI67PJKV//gOT5inYQNcy7RdjLnuQSAZTLqJ1A7J0BC1guLyA22s/C4v2uYNoIlA4O6WlcVJDkDDvKD4tBJfbhr3h3VbQIDAQAB
+  privateKey: MIIEpAIBAAKCAQEAs84jmXQ1N1DmZWOO+us8xUqI33Ay76zG/ZQ6s4GAxjcTDMdkpFep3ip/UJr3LWLqAHYSyojpe6H9bB7e/gus9y9AdTGF+W1io68KM2NEq6KGtMcNhZdsWwuX78oP2N3o6NFNDxT8zHF2C+4jM8OOHie+lJ1loL1pB0johIxNJyd6z4Dnlcalwb53smc1pmAOhbH/6oN2XzNzdef2Wl+U9UoDANM96JJ51GHKQXf0R+4xlvNhfEQ3A3OnBgI67PJKV//gOT5inYQNcy7RdjLnuQSAZTLqJ1A7J0BC1guLyA22s/C4v2uYNoIlA4O6WlcVJDkDDvKD4tBJfbhr3h3VbQIDAQABAoIBAQCrVq0fxtgLLUFPrm6Kdu2DB4KkgPNY5yj8bWr+sVJ4D/VMQRmLbaoGdjK6KeGO02ovJFTFwW/Ui0nF5SkTpyacqd9fjeCgDfdoCR3MWDUQ5SA+VkxxWBk+LS8Mpl0xiE0wxnoK/DHl09zsg3HyGtBrte3rCo3UfYn/Eh/YZyYCPwePIZGWa1sLWy5f4yIwwUpvP3wYYzC3tce7NcLloOGnI/WbfLg9e1K4pyWb82zmYKgpIStEmz41+G3ACXCUIw8Fsji01O23nLW3vrk46TXQCTOfr52Wc44/VuoqIYBvDWNNk5c8JXCuaT2CHxUd6zR567qfP0E4wchfMAfb0Ij1AoGBAOizoUXpVu0kFQlWvlLPa2l7eipoT4T2UQkLSZtQL3USMe/lamupV8wUgvWPNEGNqtg3TEKwKk3TZqS/k1d8SK/OCOc539UvF7F8DvpMQnSVf9EJfdmmLej1CpLXlZs+4JmZERX34RE0Q3qGQ09Wucl+2PmBU3Pc7W9DjUfymEobAoGBAMXOuMOR7VG0zyYohzPZSkwHAj1PNiwsHqfqwgr+K4Ud+P7UnVytNoE/n3sDapvG4um0KCEOjjoRg13bnGhd9ZPtirX0ZbH1DEOdN/bo3dcolsa2P+6yrCd+u7Fb3Nb/4+NSliAcIkKvBdr09nBD5JRGfWO6UdXojE0WWh8HwFcXAoGAGbFbqSBuXJiTSgit0u7b6TWc83m47fFUWS9J3UApPT/ZC6fE7EYyT3IkU4CQQHyn1F+mp+ZThWxF9QLB/fLXA7I4AW++awdcElikPraUz9KB3k6x+ooCn6oOlNAA0LdMjSj9XfOUghXHLYwNeoEU2k6LHmFNGYnXHWXT/5GlhukCgYBcPCNdVgsiATxiX52DqLuDLfV2Xxw0hrIYvFeUxqXGYY58TOm/kCkNJXyY4KPyVU/zh4T6vQ3Gt+nYdxG8fKuJOcdnRrmwvEHmuUWiRT1EGXIM4Gh5RikOFYMxlVMpkZJSqmzENjone/MwAO90s8O+/At12ChWpSPewiBtvbCLKwKBgQCcZdCsKAPhqK+Ih1aRImvCQP/COLxSes1HW2ptCrGo4LnkBe/gdyQCohwHazO/IN1El86DkzOnuOJA8GzWhPlWatQwmkf0WIwtAnLzYIaI4TaBaXwp0yoXcs14IVenNutRp1hCxAKR0o4EjYZd8K/fJemIZ5XRmIkduHoUaWAwDw==
+  iss: http://arch.homework/
+  aud: Otus  
+  
+postgresql:
+  enabled: true
+  postgresqlUsername: myuser
+  postgresqlPassword: passwd
+  postgresqlDatabase: myapp
+  service:
+    port: 5432
+    type: NodePort
+    
+metrics:
+  serviceMonitor:
+    enabled: true

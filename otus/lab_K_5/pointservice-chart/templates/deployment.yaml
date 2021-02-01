@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pointservice-chart.fullname" . }}
+  labels:
+{{ include "pointservice-chart.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "pointservice-chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "pointservice-chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+    spec:
+      initContainers:
+        - name: check-db-ready
+          image: postgres:latest
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                    name: pointservice-config
+                    key: DatabaseConnectionString__Host
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                    name: pointservice-config
+                    key: DatabaseConnectionString__Port
+          command:
+            - sh
+            - "-c"
+            - |
+              until pg_isready -h $POSTGRES_HOST  -p  $POSTGRES_PORT; 
+              do echo waiting for database; sleep 2; done;
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+          - name: {{ .Values.service.port.alias }}
+            containerPort: 80
+            protocol: TCP
+        env:
+        - name: DatabaseConnectionString__Host
+          valueFrom:
+            configMapKeyRef:
+                name: pointservice-config
+                key: DatabaseConnectionString__Host
+        - name: DatabaseConnectionString__Database
+          valueFrom:
+            configMapKeyRef:
+                name: pointservice-config
+                key: DatabaseConnectionString__Database
+        - name: DatabaseConnectionString__Port
+          valueFrom:
+            configMapKeyRef:
+                name: pointservice-config
+                key: DatabaseConnectionString__Port
+        - name: DatabaseConnectionString__UserName
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: DatabaseConnectionString__UserName
+        - name: DatabaseConnectionString__Password
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: DatabaseConnectionString__Password
+        - name: Audience__PublicKey
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: Audience__PublicKey
+        - name: Audience__PrivateKey
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: Audience__PrivateKey
+        - name: Audience__Iss
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: Audience__Iss
+        - name: Audience__Aud
+          valueFrom:
+            secretKeyRef:
+                name: pointservice-config-secret
+                key: Audience__Aud
+        - name: ASPNETCORE_ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+                name: pointservice-config
+                key: ASPNETCORE_ENVIRONMENT
+        startupProbe:
+            httpGet:
+                path: /startup
+                port: {{ .Values.service.port.alias }}
+            failureThreshold: 5
+            periodSeconds: 10   
+        readinessProbe:
+            httpGet:
+                port: {{ .Values.service.port.alias }}
+                path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5
+        resources:
+            limits:
+                memory: "200Mi"

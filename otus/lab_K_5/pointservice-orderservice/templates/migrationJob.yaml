@@ -1,0 +1,75 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}"
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "{{ .Release.Name }}"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+        restartPolicy: Never
+        initContainers:
+        - name: check-db-ready
+          image: postgres:latest
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                    name: pointservice-orders-config
+                    key: DatabaseConnectionString__Host
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                    name: pointservice-orders-config
+                    key: DatabaseConnectionString__Port
+          command:
+            - sh
+            - "-c"
+            - |
+              until pg_isready -h $POSTGRES_HOST  -p  $POSTGRES_PORT; 
+              do echo waiting for database; sleep 2; done;
+        containers:
+        - name: migration
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          command: [ "dotnet", "PointService.Orders.DatabaseMigration.dll", "migration"]
+          env:
+          - name: DatabaseConnectionString__Host
+            valueFrom:
+              configMapKeyRef:
+                  name: pointservice-orders-config
+                  key: DatabaseConnectionString__Host
+          - name: DatabaseConnectionString__Database
+            valueFrom:
+              configMapKeyRef:
+                  name: pointservice-orders-config
+                  key: DatabaseConnectionString__Database
+          - name: DatabaseConnectionString__Port
+            valueFrom:
+              configMapKeyRef:
+                  name: pointservice-orders-config
+                  key: DatabaseConnectionString__Port
+          - name: DatabaseConnectionString__UserName
+            valueFrom:
+              secretKeyRef:
+                  name: pointservice-orders-config-secret
+                  key: DatabaseConnectionString__UserName
+          - name: DatabaseConnectionString__Password
+            valueFrom:
+              secretKeyRef:
+                  name: pointservice-orders-config-secret
+                  key: DatabaseConnectionString__Password        
