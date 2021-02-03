@@ -1,0 +1,17 @@
+apiVersion: v2
+
+description: A Helm chart for Kubernetes
+name: pointservice-billing-chart
+
+type: application
+
+version: 0.1.0
+appVersion: 3.0.0
+
+dependencies:
+- name: postgresql
+  version: 8.x.x
+  repository: https://charts.bitnami.com/bitnami
+  condition: postgresql.enabled
+  tags:
+  - pointservice-database

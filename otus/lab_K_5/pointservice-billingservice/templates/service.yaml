@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pointservice-billing-chart.fullname" . }}
+  labels:
+{{ include "pointservice-billing-chart.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port.value }}
+      targetPort: {{ .Values.service.port.alias }}
+      protocol: TCP
+      name: {{ .Values.service.port.alias }}
+  selector:
+    {{- include "pointservice-billing-chart.selectorLabels" . | nindent 4 }}
