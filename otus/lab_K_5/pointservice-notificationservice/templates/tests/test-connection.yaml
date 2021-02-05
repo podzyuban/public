@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "pointservice-notifications-config.fullname" . }}-test-connection"
+  labels:
+{{ include "pointservice-notifications-config.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "pointservice-notifications-config.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
