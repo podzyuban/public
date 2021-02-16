@@ -39,9 +39,10 @@ postgresql:
   enabled: true
   postgresqlUsername: myuser
   postgresqlPassword: passwd
-  postgresqlDatabase: myapp
+  postgresqlDatabase: persondb
   service:
     port: 5432
+    nodeport: 1234
     type: NodePort
     
 metrics:

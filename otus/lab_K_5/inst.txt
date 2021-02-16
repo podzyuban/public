@@ -1,2 +1,75 @@
 https://medium.com/@JockDaRock/minikube-on-windows-10-with-hyper-v-6ef0f4dc158c
 minikube start --vm-driver hyperv --hyperv-virtual-switch "Primary Virtual Switch"
+
+https://medium.com/@JockDaRock/minikube-on-windows-10-with-hyper-v-6ef0f4dc158c
+minikube start --vm-driver hyperv --hyperv-virtual-switch "Primary Virtual Switch"
+for /l %g in () do @(cls&kubectl get all & timeout /t 5 > null)
+
+
+kubectl get pods -n kube-system
+
+kubectl create namespace myapp
+
+hello-demo
+
+kubectl get pods -A все запущенные поды
+
+kubectl describe pod hello-demo конкретный под
+
+wget -qO- http://172.17.0.6:8000/Health
+
+https://github.com/schetinnikov-otus/arch-labs
+
+for /l %g in () do @(cls&kubectl get all & timeout /t 5 > null)
+
+kubectl.exe set image deployment/hello-deployment hello-app=podzyubandocker/repository:otus.lesson1.v2 --record
+
+kubectl scale deployment hello-deployment --replicas=4
+
+kubectl apply -f deployment.yaml -f service.yaml
+
+curl http://192.168.176.128:30517/health
+
+minikube.exe service hello-service --url -n myapp адресс сервиса
+
+minikube.exe service nginx-nginx-ingress-controller --url -n monitoring адресс сервиса
+
+
+
+ d:\projects\hackrrank\otus\dockerSample right
+ d:\projects\hackrrank\otus\labs\mk\lab1 rigthb
+ 
+ while true ; do curl http://172.18.89.205:30035/health ; echo '\n'; sleep 1; done
+for /l %g in () do @(curl http://172.18.89.205:30035 & timeout /t 1 > null)
+
+kubectl patch service hello-service --patch $(Get-Content servicePatch.yaml -Raw)   
+
+minikube addons enable ingress
+
+kubectl get pods -n kube-system | findstr ingress
+
+kubectl apply -f ingress.yaml
+
+kubectl get ing
+
+minikube start
+
+ D:\chromedownloads\helm-v3.2.1-windows-amd64\windows-amd64\helm.exe upgrade pointservice-chart ./pointservice-chart
+ 
+  newman run "D:\projects\GitHub\Public\otus\lab_K_2\prodlike\Postman\User API Tests.postman_collection.json"
+  
+http://localhost:5001/User?take=12
+
+docker run -i loadimpact/k6 run -< stresstest.js
+
+
+helm install prom stable/prometheus-operator -f prometheus.yaml --atomic
+
+helm install nginx stable/nginx-ingress -f nginx-ingress.yaml --atomic
+
+
+
+
+
+                                                                                     
+

@@ -33,7 +33,7 @@ postgresql:
   enabled: true
   postgresqlUsername: myuser
   postgresqlPassword: passwd
-  postgresqlDatabase: myapp
+  postgresqlDatabase: notificationdb
   service:
     port: 5432
     type: NodePort
