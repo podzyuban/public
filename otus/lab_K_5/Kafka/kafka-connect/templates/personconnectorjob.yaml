@@ -26,4 +26,5 @@ spec:
         containers:
         - name: {{ .Values.personconnector.name }}
           image: alpine:latest
-          command: [ "/bin/sh", "curl", "-X", "POST","http://localhost:{{.Values.image.containerport}}/connectors", "-H","'Content-Type: application/json'", "-d", "{{ .Values.personconnector.config | toJson | quote}}"]
+#          command: [ "/bin/sh", "curl", "-X", "POST", "{{ .Values.personconnector.url }}", "-H","'Content-Type: application/json'", "-d", "{{ .Values.personconnector.config | toJson | quote}}"]
+          command: [ "/bin/sh", "curl", "-X", "POST", "{{ .Values.personconnector.url }}", "-H","'Content-Type: application/json'", "-d", "{{ .Values.personconnector.config }}"]

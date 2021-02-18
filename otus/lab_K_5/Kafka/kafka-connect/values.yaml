@@ -43,6 +43,7 @@ service:
 
 personconnector: 
   name: connector-person
+  url: http://localhost:8083/connectors
   config:
     {
         "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
