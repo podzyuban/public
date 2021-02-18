@@ -20,7 +20,7 @@ spec:
     spec:
       initContainers:
         - name: check-db-ready
-          image: postgres:latest
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           env:
             - name: POSTGRES_HOST
               valueFrom:

@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Values.personconnector.name }}"
+  labels:
+    app.kubernetes.io/managed-by: {{ .Values.personconnector.name | quote }}
+    app.kubernetes.io/instance: {{ .Values.personconnector.name | quote }}
+    app.kubernetes.io/version: {{ .Values.personconnector.name }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": never
+spec:
+  template:
+    metadata:
+      name: "{{ .Values.personconnector.name }}"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Values.personconnector.name | quote }}
+        app.kubernetes.io/instance: {{ .Values.personconnector.name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+        restartPolicy: Never
+        containers:
+        - name: {{ .Values.personconnector.name }}
+          image: alpine:latest
+          command: [ "/bin/sh", "curl", "-X", "POST","http://localhost:{{.Values.image.containerport}}/connectors", "-H","'Content-Type: application/json'", "-d", "{{ .Values.personconnector.config | toJson | quote}}"]

@@ -1,0 +1,6 @@
+externalAccess:
+    enabled: true
+    service:
+        type: NodePort
+    autoDiscovery:
+        enabled: true
