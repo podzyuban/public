@@ -38,11 +38,13 @@ serviceAccount:
 
 service:
   type: NodePort
-  port: 80
+  port: 8030
   nodePort: 30500
 
 personconnector: 
   name: connector-person
+  curlCommand: > 
+    curl -v -i -H \"Content-Type: application/json\" -X POST http://kc-kafkaconnect-service:8083/connectors -d '{\"name\":\"aaa\",\"config\":{\"connector.class\":\"io.debezium.connector.postgresql.PostgresConnector\",\"plugin.name\":\"pgoutput\",\"database.hostname\":\"persondb\",\"database.port\":\"5432\",\"database.user\":\"myuser\",\"database.password\":\"passwd\",\"database.dbname\":\"persondb\",\"database.server.name\":\"persondb\",\"table.whitelist\":\"public.person\"}}'
   url: http://localhost:8083/connectors
   config:
     {

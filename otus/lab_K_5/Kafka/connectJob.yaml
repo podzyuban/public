@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "connector-person"
+  labels:
+    app.kubernetes.io/managed-by: "connector-person"
+    app.kubernetes.io/instance: "connector-person"
+    app.kubernetes.io/version: connector-person
+    helm.sh/chart: "kafka-connect-0.1.0"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": never
+spec:
+  template:
+    metadata:
+      name: "connector-person"
+      labels:
+        app.kubernetes.io/managed-by: "connector-person"
+        app.kubernetes.io/instance: "connector-person"
+        helm.sh/chart: "kafka-connect-0.1.0"
+    spec:
+        restartPolicy: Never
+        containers:
+        - name: connector-person
+          image: radial/busyboxplus:curl
+#          command: ["curl"]
+#          args: ["-v","-i","-X POST", "http://kafkaconnect-service:8083/connectors", "-d '{\"name\":\"aaa\",\"config\":{\"connector.class\":\"io.debezium.connector.postgresql.PostgresConnector\",\"plugin.name\":\"pgoutput\",\"database.hostname\":\"persondb\",\"database.port\":\"5432\",\"database.user\":\"myuser\",\"database.password\":\"passwd\",\"database.dbname\":\"persondb\",\"database.server.name\":\"persondb\",\"table.whitelist\":\"public.person\"}}'", "-H \"Content-Type: application/json\""]
+          command: ["/bin/sh", "-c"]
+        # args: ["curl nodejsv5:8080 && sleep 1"]
+          args: ["curl -v -i  -H \"Content-Type: application/json\" -X POST http://kafkaconnect-service:8083/connectors -d '{\"name\":\"aaa\",\"config\":{\"connector.class\":\"io.debezium.connector.postgresql.PostgresConnector\",\"plugin.name\":\"pgoutput\",\"database.hostname\":\"persondb\",\"database.port\":\"5432\",\"database.user\":\"myuser\",\"database.password\":\"passwd\",\"database.dbname\":\"persondb\",\"database.server.name\":\"persondb\",\"table.whitelist\":\"public.person\"}}'"]

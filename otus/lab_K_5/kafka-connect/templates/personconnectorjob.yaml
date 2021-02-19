@@ -27,4 +27,4 @@ spec:
         - name: {{ .Values.personconnector.name }}
           image: radial/busyboxplus:curl
           command: ["/bin/sh", "-c"]
-          args: ["{{ .Values.personconnector.curlCommand}}"]
+          args: ["{{ .Values.personconnector.curlCommand }} {{ .Values.personconnector.curlParams }}{{ .Values.personconnector.curlHeader }} -X POST http://{{ include "kafka-connect.fullname" . }}:8083/connectors {{ .Values.personconnector.curlBody }}"]

@@ -1,0 +1,57 @@
+# Default values for kafka-connect.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: debezium/connect
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: 1.2
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+ingress:
+    enabled: false
+
+kafka:
+    enabled: true
+    BOOTSTRAP_SERVERS: kafka:9092
+    GROUP_ID: 1
+    OFFSET_STORAGE_TOPIC: connect-offsets112
+    CONFIG_STORAGE_TOPIC: connect-configs112
+    STATUS_STORAGE_TOPIC: connect-status112
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+
+service:
+  type: NodePort
+  port: 8083
+  nodeport: 30500
+
+personconnector: 
+  name: connector-person
+  url: http://localhost:8083/connectors
+  curlCommand: curl
+  curlParams: > 
+            -v -i
+  curlHeader: >
+            -H \"Content-Type: application/json\" 
+#  curlCommand: > 
+#    curl -v -i -X POST http://localhost:8083/connectors
+#  curlCommand: > 
+#    curl -v -i -H \"Content-Type: application/json\" -X POST http://localhost:8083/connectors -d '{\"name\":\"aaa\",\"config\":{\"connector.class\":\"io.debezium.connector.postgresql.PostgresConnector\",\"plugin.name\":\"pgoutput\",\"database.hostname\":\"persondb\",\"database.port\":\"5432\",\"database.user\":\"myuser\",\"database.password\":\"passwd\",\"database.dbname\":\"persondb\",\"database.server.name\":\"persondb\",\"table.whitelist\":\"public.person\"}}'
+  curlBody: >
+    -d '{\"name\":\"aaa\",\"config\":{\"connector.class\":\"io.debezium.connector.postgresql.PostgresConnector\",\"plugin.name\":\"pgoutput\",\"database.hostname\":\"persondb\",\"database.port\":\"5432\",\"database.user\":\"myuser\",\"database.password\":\"passwd\",\"database.dbname\":\"persondb\",\"database.server.name\":\"persondb\",\"table.whitelist\":\"public.person\"}}'
+  

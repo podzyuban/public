@@ -1,0 +1,139 @@
+NAME: kc
+LAST DEPLOYED: Fri Feb 19 00:32:13 2021
+NAMESPACE: default
+STATUS: pending-install
+REVISION: 1
+HOOKS:
+---
+# Source: kafka-connect/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "kc-kafka-connect-test-connection"
+  labels:
+    helm.sh/chart: kafka-connect-0.1.0
+    app.kubernetes.io/name: kafka-connect
+    app.kubernetes.io/instance: kc
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['kc-kafka-connect:8083']
+  restartPolicy: Never
+---
+# Source: kafka-connect/templates/personconnectorjob.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "connector-person"
+  labels:
+    app.kubernetes.io/managed-by: "connector-person"
+    app.kubernetes.io/instance: "connector-person"
+    app.kubernetes.io/version: connector-person
+    helm.sh/chart: "kafka-connect-0.1.0"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": never
+spec:
+  template:
+    metadata:
+      name: "connector-person"
+      labels:
+        app.kubernetes.io/managed-by: "connector-person"
+        app.kubernetes.io/instance: "connector-person"
+        helm.sh/chart: "kafka-connect-0.1.0"
+        fff: "
+    "
+    spec:
+        restartPolicy: Never
+        containers:
+        - name: connector-person
+          image: radial/busyboxplus:curl
+          command: ["curl"]
+#          args: ["-X", "POST", "http://localhost:8083/connectors", "-H","'Content-Type: application/json'", "-d", ""{\"connector.class\":\"io.debezium.connector.postgresql.PostgresConnector\",\"database.dbname\\\"\":\"persondb\",\"database.hostname\":\"persondb\",\"database.password\":\"passwd\",\"database.port\":\"5432\",\"database.server.name\":\"persondb\",\"database.user\":\"myuser\",\"plugin.name\":\"pgoutput\",\"table.whitelist\":\"public.person\"}""]
+MANIFEST:
+---
+# Source: kafka-connect/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kc-kafka-connect
+  labels:
+    helm.sh/chart: kafka-connect-0.1.0
+    app.kubernetes.io/name: kafka-connect
+    app.kubernetes.io/instance: kc
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  ports:
+    - name: kafkaconnect
+      protocol: TCP
+      port: 8083
+      nodePort: 30500
+  selector:
+    app.kubernetes.io/name: kafka-connect
+    app.kubernetes.io/instance: kc
+---
+# Source: kafka-connect/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kc-kafka-connect
+  labels:
+    helm.sh/chart: kafka-connect-0.1.0
+    app.kubernetes.io/name: kafka-connect
+    app.kubernetes.io/instance: kc
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kafka-connect
+      app.kubernetes.io/instance: kc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kafka-connect
+        app.kubernetes.io/instance: kc
+    spec:
+      containers:
+        - name: kafka-connect
+          image: "debezium/connect:1.2"
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8083
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8083
+          env:
+          - name: BOOTSTRAP_SERVERS
+            value: "kafka:9092"
+          - name: GROUP_ID
+            value: "1"
+          - name: OFFSET_STORAGE_TOPIC
+            value: "connect-offsets112"
+          - name: CONFIG_STORAGE_TOPIC
+            value: "connect-configs112"
+          - name: STATUS_STORAGE_TOPIC
+            value: "connect-status112"
+          ports:
+            - containerPort: 8083
+
+NOTES:
+1. Get the application URL by running these commands:
+  export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services kc-kafka-connect)
+  export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
