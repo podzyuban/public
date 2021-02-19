@@ -21,9 +21,9 @@ kafka:
     enabled: true
     BOOTSTRAP_SERVERS: kafka:9092
     GROUP_ID: 1
-    OFFSET_STORAGE_TOPIC: connect-offsets112
-    CONFIG_STORAGE_TOPIC: connect-configs112
-    STATUS_STORAGE_TOPIC: connect-status112
+    OFFSET_STORAGE_TOPIC: connect-offsets
+    CONFIG_STORAGE_TOPIC: connect-configs
+    STATUS_STORAGE_TOPIC: connect-status
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -48,10 +48,6 @@ personconnector:
             -v -i
   curlHeader: >
             -H \"Content-Type: application/json\" 
-#  curlCommand: > 
-#    curl -v -i -X POST http://localhost:8083/connectors
-#  curlCommand: > 
-#    curl -v -i -H \"Content-Type: application/json\" -X POST http://localhost:8083/connectors -d '{\"name\":\"aaa\",\"config\":{\"connector.class\":\"io.debezium.connector.postgresql.PostgresConnector\",\"plugin.name\":\"pgoutput\",\"database.hostname\":\"persondb\",\"database.port\":\"5432\",\"database.user\":\"myuser\",\"database.password\":\"passwd\",\"database.dbname\":\"persondb\",\"database.server.name\":\"persondb\",\"table.whitelist\":\"public.person\"}}'
   curlBody: >
-    -d '{\"name\":\"aaa\",\"config\":{\"connector.class\":\"io.debezium.connector.postgresql.PostgresConnector\",\"plugin.name\":\"pgoutput\",\"database.hostname\":\"persondb\",\"database.port\":\"5432\",\"database.user\":\"myuser\",\"database.password\":\"passwd\",\"database.dbname\":\"persondb\",\"database.server.name\":\"persondb\",\"table.whitelist\":\"public.person\"}}'
+    -d '{\"name\":\"personConnector\",\"config\":{\"connector.class\":\"io.debezium.connector.postgresql.PostgresConnector\",\"plugin.name\":\"pgoutput\",\"database.hostname\":\"authservice-postgresql\",\"database.port\":\"5432\",\"database.user\":\"myuser\",\"database.password\":\"passwd\",\"database.dbname\":\"persondb\",\"database.server.name\":\"persondb\",\"table.whitelist\":\"public.person\"}}'
   
